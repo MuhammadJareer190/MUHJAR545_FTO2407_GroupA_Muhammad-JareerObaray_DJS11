@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { fetchPreviews } from "../services/api";
-import { genreMap } from "../utils/genreMapper";
+import ShowList from "../components/ShowList";
+
 
 export const HomePage = () => {
     const [previews, setPreviews] = useState([]);
@@ -8,9 +9,13 @@ export const HomePage = () => {
   
     useEffect(() => {
       const loadPreviews = async () => {
-        const data = await fetchPreviews();
-        setPreviews(data);
-        setLoading(false);
+        try {
+          const data = await fetchPreviews();
+          setPreviews(data);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching previews:', error);
+        }
       };
       loadPreviews();
     }, []);
@@ -20,32 +25,7 @@ export const HomePage = () => {
     return (
       <div>
         <h1 className="text-2xl font-bold mb-6">Podcasts</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {previews.map((preview) => (
-            <div
-              key={preview.id}
-              className="bg-white shadow-md rounded-md overflow-hidden"
-            >
-              <img
-                src={preview.image}
-                alt={preview.title}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4">
-                <h2 className="text-lg font-bold truncate">{preview.title}</h2>
-                <p className="text-sm text-gray-600">
-                  {preview.seasons} Seasons
-                </p>
-                <p className="text-sm text-gray-600">
-                  Updated: {new Date(preview.updated).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Genres: {preview.genres.map((id) => genreMap[id]).join(', ')}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ShowList previews={previews} />
       </div>
     );
   };

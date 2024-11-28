@@ -1,44 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { fetchShowDetails } from "../utils/api";
+import { useParams } from "react-router";
+import { fetchShow } from "../services/api";
 
-const ShowDetails = ({ showId, onBack }) => {
-  const [showDetails, setShowDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadShowDetails = async () => {
-      try {
-        const data = await fetchShowDetails(showId);
-        setShowDetails(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-    loadShowDetails();
-  }, [showId]);
-
-  if (loading) return <p>Loading show details...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  return (
-    <div>
-      <button onClick={onBack}>Back to Shows</button>
-      <h2>{showDetails.name}</h2>
-      <p>{showDetails.description}</p>
-      <h3>Seasons:</h3>
-      <ul>
-        {showDetails.seasons.map((season) => (
-          <li key={season.id}>
-            <h4>{season.name}</h4>
-            <p>{season.episodeCount} Episodes</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default ShowDetails;
+const ShowDetails = () => {
+    const { id } = useParams();
+    const [showDetails, setShowDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const loadShowDetails = async () => {
+        try {
+          const data = await fetchShow(id);
+          setShowDetails(data);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching show details:', error);
+        }
+      };
+      loadShowDetails();
+    }, [id]);
+  
+    if (loading) return <p className="text-center mt-20">Loading...</p>;
+  
+    if (!showDetails)
+      return <p className="text-center mt-20">Show details not found</p>;
+  
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-6">{showDetails.title}</h1>
+        <img
+          src={showDetails.image}
+          alt={showDetails.title}
+          className="w-full h-64 object-cover mb-4"
+        />
+        <p>{showDetails.description}</p>
+        <button
+          onClick={() => alert('Playing podcast...')}
+          className="mt-4 p-2 bg-blue-500 text-white rounded"
+        >
+          Play
+        </button>
+      </div>
+    );
+  };
+  
+  export default ShowDetails;

@@ -5,6 +5,7 @@ import { Navbar } from "./components/Navbar";
 import { HomePage } from './pages/HomePage';
 import { ShowPage } from './pages/ShowPage';
 import { FavoritesPage } from './pages/FavoritesPage';
+import ShowDetails from './components/ShowDetails';
 
 function App()  {
   return (
@@ -14,7 +15,7 @@ function App()  {
         <div className='pt-16 max-w-6xl mx-auto px-4'>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/show/:id" element={<ShowPage />} />
+          <Route path="/show/:id" element={<ShowDetails />} />
           <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
         </div>
