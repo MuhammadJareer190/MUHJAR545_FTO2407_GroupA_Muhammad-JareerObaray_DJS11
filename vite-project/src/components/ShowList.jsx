@@ -1,21 +1,45 @@
 import React, {useState, useEffect} from "react";
-import { fetchPreview } from "../services/api";
+import ShowCard from "./ShowCard";
+import { fetchShows } from "../services/api";
 
-const ShowList = () => {
-    const [show, setShows] = useState([]);
+const ShowsList = ({ onShowSelect }) => {
+    const [shows, setShows] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [error, setError] = useState(null);
+  
     useEffect(() => {
-        const getShow = async () => {
-            setLoading(true);
-            const data = await fetchPreview();
-            setShows(data.sort((a, b) => a.title.localCompare(b.title)));
-            setLoading(false);        
-        };
-        getShow()
+      const loadShows = async () => {
+        try {
+          const data = await fetchShows();
+          setShows(data);
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+      loadShows();
     }, []);
-
-    if(loading) return <div>Loading...</div>;
-};
-
-export default ShowList
+  
+    if (loading) return <p>Loading shows...</p>;
+    if (error) return <p>Error: {error}</p>;
+  
+    return (
+      <div>
+        <h2>All Shows</h2>
+        <ul>
+          {shows.map((show) => (
+            <li key={show.id}>
+              <div onClick={() => onShowSelect(show.id)} style={{ cursor: "pointer" }}>
+                <img src={show.image} alt={show.name} />
+                <h3>{show.name}</h3>
+                <p>{show.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+  
+  export default ShowsList;
