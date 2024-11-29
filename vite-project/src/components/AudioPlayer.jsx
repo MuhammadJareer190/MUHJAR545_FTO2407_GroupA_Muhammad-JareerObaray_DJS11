@@ -1,50 +1,27 @@
-import React, { useState, useRef } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
+import { AudioContext } from "../contexts/AudioContext"; // Correct path
+import { FaPlay, FaPause, FaTimes } from "react-icons/fa";
 
-const AudioPlayer = ({ audioSrc, title, isVisible, onClose }) => {
+export const AudioPlayer = () => {
+  const { audioSrc } = useContext(AudioContext); // Use context to get the audio source
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const audioPlayer = useRef();
 
-  const togglePlay = () => {
+  const togglePlayPause = () => {
     if (isPlaying) {
-      audioRef.current.pause();
+      audioPlayer.current.pause();
     } else {
-      audioRef.current.play();
+      audioPlayer.current.play();
     }
     setIsPlaying(!isPlaying);
   };
 
-  const handleClose = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0; // Reset the audio
-    }
-    setIsPlaying(false);
-    onClose();
-  };
-
-  if (!isVisible) return null;
-
   return (
-    <div className="fixed bottom-4 left-4 right-4 bg-white shadow-lg rounded-lg p-4 z-50 flex items-center justify-between">
-      <div>
-        <h3 className="text-lg font-bold">{title}</h3>
-        <p className="text-sm text-gray-600">Now Playing</p>
-      </div>
-      <div className="flex items-center gap-4">
-        <button
-          onClick={togglePlay}
-          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-        >
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-        <button
-          onClick={handleClose}
-          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-        >
-          X
-        </button>
-      </div>
-      <audio ref={audioRef} src={audioSrc} />
+    <div className="audio-player">
+      <audio ref={audioPlayer} src={audioSrc}></audio>
+      <button onClick={togglePlayPause}>
+        {isPlaying ? <FaPause /> : <FaPlay />}
+      </button>
     </div>
   );
 };

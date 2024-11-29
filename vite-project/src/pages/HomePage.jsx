@@ -28,4 +28,6 @@ export const HomePage = () => {
         <ShowList previews={previews} />
       </div>
     );
-  };
+};
+
+export default HomePage

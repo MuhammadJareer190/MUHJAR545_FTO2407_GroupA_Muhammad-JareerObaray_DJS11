@@ -1,21 +1,20 @@
 import React, { useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchShowDetails } from '../services/api';
+import { fetchShow } from '../services/api';
 import { genreMap } from '../utils/genreMapper';
-import { AudioPlayerContext } from '../contexts/AudioPlayerContext';
 
-const ShowDetails = () => {
+
+export const ShowDetails = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(0);
-  const { playAudio } = useContext(AudioPlayerContext);
 
   React.useEffect(() => {
-    const loadShowDetails = async () => {
-      const data = await fetchShowDetails(id);
+    const loadShow = async () => {
+      const data = await fetchShow(id);
       setShow(data);
     };
-    loadShowDetails();
+    loadShow();
   }, [id]);
 
   const handleSeasonChange = (event) => {
@@ -85,8 +84,12 @@ const ShowDetails = () => {
                   key={index}
                   className="flex justify-between items-center p-2 border rounded-md bg-white shadow-sm"
                 >
-                  <span className="text-gray-800">{episode.title}</span>
-                  <button
+                    {/* Favorites Button */}
+                    <button className="mt-4 bg-yellow-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-yellow-600">
+                        Add to Favorites
+                    </button>
+                    <span className="text-gray-800">{episode.title}</span>
+                    <button
                     onClick={() => handlePlay(episode.audioUrl)}
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                   >
@@ -96,11 +99,6 @@ const ShowDetails = () => {
               ))}
             </ul>
           </div>
-
-          {/* Favorites Button */}
-          <button className="mt-4 bg-yellow-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-yellow-600">
-            Add to Favorites
-          </button>
         </div>
       </div>
     </div>
