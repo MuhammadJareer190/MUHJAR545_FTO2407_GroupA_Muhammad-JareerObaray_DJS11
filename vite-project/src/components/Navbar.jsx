@@ -3,20 +3,24 @@ import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
   return (
-    <nav className="bg-gray-800 text-white fixed w-full top-0 shadow-md z-10">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center h-12">
-          <h1 className="text-lg font-semibold">
-            <Link to="/">PodSphere</Link>
-          </h1>
-          <div className="space-x-4">
-            <Link to="/" className="hover:text-yellow-300">
-              Home
-            </Link>
-            <Link to="/favorites" className="hover:text-yellow-300">
-              Favorites
-            </Link>
-          </div>
+    <nav className="bg-lime-600 text-white fixed top-0 left-0 w-full shadow-md z-10">
+      <div className="container mx-auto flex justify-between items-center px-4 py-3">
+        <Link to="/" className="text-2xl font-bold">
+          PodSphere
+        </Link>
+        <div className="flex space-x-6">
+          <Link
+            to="/"
+            className="hover:text-gray-200 transition duration-200"
+          >
+            Home
+          </Link>
+          <Link
+            to="/favorites"
+            className="hover:text-gray-200 transition duration-200"
+          >
+            Favorites
+          </Link>
         </div>
       </div>
     </nav>

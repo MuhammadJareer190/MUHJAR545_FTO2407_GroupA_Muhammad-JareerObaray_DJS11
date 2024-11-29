@@ -40,3 +40,14 @@
 .read-the-docs {
   color: #888;
 }
+
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+main {
+  margin-top: 4rem; /* Adjust based on navbar height */
+  padding: 1rem;
+}
