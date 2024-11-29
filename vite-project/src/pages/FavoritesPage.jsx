@@ -1,3 +1,4 @@
+/* This code snippet is a React component called `FavoritesPage`. Here's a breakdown of what it does: */
 import React, { useEffect, useState } from 'react';
 
 export function FavoritesPage() {
@@ -9,63 +10,36 @@ export function FavoritesPage() {
   }, []);
 
   const removeFromFavorites = (episodeId) => {
-    const updatedFavorites = favorites.filter(fav => fav.episodeId !== episodeId);
+    const updatedFavorites = favorites.filter((fav) => fav.id !== episodeId);
     setFavorites(updatedFavorites);
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
   return (
-    <div style={{ background: '#141414', color: 'white', padding: '20px' }}>
-      <h1 style={{ textAlign: 'center', fontSize: '32px' }}>Your Favorites</h1>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {favorites.map((fav) => (
-          <div
-            key={fav.episodeId}
-            style={{
-              display: 'flex',
-              background: '#333',
-              borderRadius: '8px',
-              padding: '20px',
-              gap: '20px',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.5)',
-            }}
-          >
-            <img
-              src={fav.imageUrl}
-              alt={fav.title}
-              style={{
-                width: '150px',
-                borderRadius: '8px',
-              }}
-            />
-            <div>
-              <h2 style={{ fontSize: '24px' }}>{fav.title}</h2>
-              <p>{fav.description}</p>
-              <p><strong>Season:</strong> {fav.seasonTitle}</p>
-              <p><strong>Episode:</strong> {fav.episodeTitle}</p>
-
+    <div className="bg-gray-900 text-white p-6">
+      <h1 className="text-3xl font-bold mb-6">Your Favorites</h1>
+      {favorites.length === 0 ? (
+        <p className="text-gray-400">No favorites added yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {favorites.map((fav) => (
+            <div key={fav.id} className="bg-gray-800 p-4 rounded-lg shadow-lg">
+              <img
+                src={fav.image}
+                alt={fav.title}
+                className="w-full h-40 object-cover rounded-md mb-4"
+              />
+              <h2 className="text-lg font-bold">{fav.title}</h2>
               <button
-                onClick={() => removeFromFavorites(fav.episodeId)}
-                style={{
-                  background: '#e50914',
-                  color: 'white',
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                }}
+                onClick={() => removeFromFavorites(fav.id)}
+                className="bg-red-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-red-600"
               >
                 Remove from Favorites
               </button>
             </div>
-          </div>
-        ))}
-
-        {favorites.length === 0 && (
-          <p style={{ textAlign: 'center', color: 'gray' }}>No favorites added yet.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

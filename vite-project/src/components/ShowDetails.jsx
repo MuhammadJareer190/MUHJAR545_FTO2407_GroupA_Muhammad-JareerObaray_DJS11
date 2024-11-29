@@ -1,54 +1,57 @@
-import React, { useState, useContext } from 'react';
+/* This code snippet is a React functional component called `ShowDetails`. It is responsible for
+displaying details of a TV show, including its title, description, genres, seasons, and episodes.
+Here is a breakdown of what the code is doing: */
+import React, { useState, useContext, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchShow } from '../services/api';
 import { genreMap } from '../utils/genreMapper';
-
+import { AudioContext } from '../contexts/AudioContext';
 
 export const ShowDetails = () => {
   const { id } = useParams();
+  const { playAudio } = useContext(AudioContext);
   const [show, setShow] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(0);
+  const [favorites, setFavorites] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadShow = async () => {
       const data = await fetchShow(id);
       setShow(data);
     };
     loadShow();
+
+    // Load existing favorites
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setFavorites(storedFavorites);
   }, [id]);
 
   const handleSeasonChange = (event) => {
     setSelectedSeason(Number(event.target.value));
   };
 
-  const handlePlay = (episodeUrl) => {
-    playAudio(episodeUrl);
+  const handleFavorite = (episode) => {
+    const updatedFavorites = [...favorites, episode];
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
-  if (!show) {
-    return <div>Loading...</div>;
-  }
+  if (!show) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
-      {/* Back Button */}
       <Link
         to="/"
         className="text-white bg-green-500 px-4 py-2 rounded-md shadow-md hover:bg-green-600 mb-4 inline-block"
       >
         Back to Home
       </Link>
-
-      {/* Show Details Layout */}
       <div className="flex flex-col lg:flex-row items-start bg-gray-100 rounded-lg shadow-lg p-6 gap-6">
-        {/* Show Image */}
         <img
           src={show.image}
           alt={show.title}
           className="w-full lg:w-1/3 rounded-lg shadow-md object-cover"
         />
-
-        {/* Show Info */}
         <div className="w-full lg:w-2/3">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{show.title}</h1>
           <p className="text-gray-600 mb-4">{show.description}</p>
@@ -56,8 +59,6 @@ export const ShowDetails = () => {
             <strong>Genres:</strong>{' '}
             {show.genres.map((id) => genreMap[id]).join(', ')}
           </p>
-
-          {/* Season Selector */}
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2">
               Select Season
@@ -74,8 +75,6 @@ export const ShowDetails = () => {
               ))}
             </select>
           </div>
-
-          {/* Episodes List */}
           <div>
             <h2 className="text-lg font-bold text-gray-800 mb-2">Episodes</h2>
             <ul className="space-y-2">
@@ -84,13 +83,15 @@ export const ShowDetails = () => {
                   key={index}
                   className="flex justify-between items-center p-2 border rounded-md bg-white shadow-sm"
                 >
-                    {/* Favorites Button */}
-                    <button className="mt-4 bg-yellow-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-yellow-600">
-                        Add to Favorites
-                    </button>
-                    <span className="text-gray-800">{episode.title}</span>
-                    <button
-                    onClick={() => handlePlay(episode.audioUrl)}
+                  <button
+                    onClick={() => handleFavorite(episode)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                  >
+                    Add to Favorites
+                  </button>
+                  <span className="text-gray-800">{episode.title}</span>
+                  <button
+                    onClick={() => playAudio(episode.audioUrl)}
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                   >
                     Play

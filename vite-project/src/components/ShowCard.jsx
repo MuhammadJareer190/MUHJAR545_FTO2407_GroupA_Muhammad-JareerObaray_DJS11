@@ -1,3 +1,11 @@
+/**
+ * The ShowCards component in JavaScript React renders a card displaying information about a TV show
+ * preview with image, title, seasons, and genres.
+ * @returns The `ShowCards` component is being returned. It is a functional component that renders a
+ * card displaying information about a TV show preview. The card includes an image, title, number of
+ * seasons, and genres of the show. The component also includes a link that redirects to the detailed
+ * view of the show when clicked.
+ */
 import React from "react";
 import { Link } from "react-router";
 import { genreMap } from "../utils/genreMapper";

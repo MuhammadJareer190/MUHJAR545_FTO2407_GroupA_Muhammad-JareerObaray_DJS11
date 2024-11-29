@@ -1,3 +1,9 @@
+/**
+ * The Navbar component in this code snippet creates a navigation bar with links to the home page and
+ * favorites page.
+ * @returns The Navbar component is being returned. It is a functional component that renders a
+ * navigation bar with links to the home page and favorites page.
+ */
 import React from 'react';
 import { Link } from 'react-router-dom';
 

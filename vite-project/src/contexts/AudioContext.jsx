@@ -1,3 +1,5 @@
+/* This code snippet is creating a React context for managing audio-related data in a React
+application. */
 import React, { createContext, useState } from "react";
 
 // Create the context
