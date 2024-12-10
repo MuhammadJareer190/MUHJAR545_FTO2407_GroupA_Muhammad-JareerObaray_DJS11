@@ -83,18 +83,20 @@ export const ShowDetails = () => {
                   key={index}
                   className="flex justify-between items-center p-2 border rounded-md bg-white shadow-sm"
                 >
-                  <button
-                    onClick={() => handleFavorite(episode)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
-                  >
-                    Add to Favorites
-                  </button>
-                  <span className="text-gray-800">{episode.title}</span>
+                  <span className="text-gray-800">
+                    {index + 1}. {episode.title}
+                  </span>
                   <button
                     onClick={() => playAudio(episode.audioUrl)}
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                   >
                     Play
+                  </button>
+                  <button
+                    onClick={() => handleFavorite(episode)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                  >
+                    Add to Favorites
                   </button>
                 </li>
               ))}
